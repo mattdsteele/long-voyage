@@ -1,0 +1,42 @@
+---
+// Component Imports
+import LongVoyageTable from '../components/LongVoyageTable.tsx';
+import PaceSlider from '../components/PaceSlider.jsx';
+// You can import components from any supported Framework here!
+
+// Component Script:
+// You can write any JavaScript/TypeScript that you'd like here.
+// It will run during the build, but never in the browser.
+// All variables are available to use in the HTML template below.
+let title = 'Long Voyage';
+
+// Full Astro Component Syntax:
+// https://docs.astro.build/core-concepts/astro-components/
+---
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <title>{title}</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="stylesheet" href="/style/global.css">
+    <link rel="stylesheet" href="/style/home.css">
+</head>
+<body>
+    <main>
+    <h1>Long Voyage</h1>
+        <LongVoyageTable client:visible />
+
+        <!--
+           - You can also use imported framework components directly in your markup!
+           -
+           - Note: by default, these components are NOT interactive on the client.
+           - The `:visible` directive tells Astro to make it interactive.
+           -
+           - See https://docs.astro.build/core-concepts/component-hydration/ 
+           -->
+        <p>Civil Sunrise: 6:11 AM</p>
+        <p>Civil Sunset: 8:42 PM</p>
+    </main>
+</body>
+</html>

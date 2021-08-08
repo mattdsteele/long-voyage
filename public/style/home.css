@@ -1,0 +1,31 @@
+h1,
+h2 {
+  font-family: Lato;
+}
+
+table {
+  font-feature-settings: 'tnum';
+  font-variant-numeric: proportional-nums; /* <numeric-spacing-values> */
+  font-size: 4.5vw;
+  border-collapse: collapse;
+}
+table td {
+  padding: 6px 3px;
+}
+tr:nth-child(odd) {
+  background-color: #eeeeee;
+}
+@media (min-width: 500px) {
+  table {
+    font-size: 24px;
+  }
+}
+tr.past-threshold {
+  background-color: #eea302;
+}
+
+/* System Fonts as used by GitHub */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+    Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+}
