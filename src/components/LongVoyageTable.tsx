@@ -1,10 +1,6 @@
-// Import stylesheets
 import { Temporal } from "@js-temporal/polyfill";
-import PaceSlider from "./PaceSlider";
-import { useState } from 'preact/hooks';
 
-export default function LongVoyageTable() {
-  const [pace, setPace] = useState(10);
+export default function LongVoyageTable({ pace }) {
   const startTime = Temporal.ZonedDateTime.from({
     year: 2021,
     month: 8,
@@ -15,9 +11,6 @@ export default function LongVoyageTable() {
   });
   const tomorrow = startTime.add({ days: 1 });
 
-  const updatePace = (e => {
-    setPace(e);
-  });
   type Offering = "C" | "W" | "R" | "B";
   const stops: [string, Offering[], number, Temporal.ZonedDateTime?][] = [
     ["Weeping Water", ["W", "C"], 54, startTime.with({ hour: 22 })],
@@ -57,30 +50,29 @@ export default function LongVoyageTable() {
         B: "⚠️",
       };
       const etahhmm = f.format(eta.toInstant().epochMilliseconds);
-      return (<tr class={classList}>
-      <td>{distance}</td>
-      <td>{location}</td>
-      <td>{availability.map((a) => mappings[a]).join(" ")}</td>
-      <td>{etahhmm}</td></tr>);
+      return (
+        <tr class={classList}>
+          <td>{distance}</td>
+          <td>{location}</td>
+          <td>{availability.map((a) => mappings[a]).join(" ")}</td>
+          <td>{etahhmm}</td>
+        </tr>
+      );
     });
   };
 
   recalculate();
-
   return (
-    <>
-      <table>
-        <thead>
-          <tr>
-            <th>Mile</th>
-            <th>Location</th>
-            <th>Offering</th>
-            <th>ETA</th>
-          </tr>
-        </thead>
-        <tbody>{etaStrings}</tbody>
-      </table>
-      <PaceSlider onPace={updatePace} />
-    </>
+    <table>
+      <thead>
+        <tr>
+          <th>Mile</th>
+          <th>Location</th>
+          <th>Offering</th>
+          <th>ETA</th>
+        </tr>
+      </thead>
+      <tbody>{etaStrings}</tbody>
+    </table>
   );
 }

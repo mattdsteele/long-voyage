@@ -1,7 +1,7 @@
 import { useState } from 'preact/hooks';
 
-export default function PaceSlider({ onPace }) {
-  const [pace, setPace] = useState(10);
+export default function PaceSlider({ onPace, initialPace = 10, label }) {
+  const [pace, setPace] = useState(initialPace);
   const onPaceUpdate = (event) => {
     setPace(event.target.value);
     if (onPace) {
@@ -10,19 +10,20 @@ export default function PaceSlider({ onPace }) {
   }
 
   return (
-    <>
-    <label for="pace">Average pace (mph):</label>
+    <div style={{display: 'flex'}}>
+    <label for={label} style={{width: '150px'}}>{label}:</label>
     <input
+    style={{flexGrow: 1}}
         type="range"
         min="9"
         max="15"
         value={pace}
         onInput={onPaceUpdate}
-        id="pace"
-        name="pace"
+        id={label}
+        name={label}
         step="0.1"
       />
     <span class="current-pace">{pace}</span>
-    </>
+    </div>
   );
 }
