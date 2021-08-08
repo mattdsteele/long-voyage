@@ -22,7 +22,7 @@ let title = 'Long Voyage';
     <link rel="stylesheet" href="/style/global.css">
     <link rel="stylesheet" href="/style/home.css">
     <link rel="manifest" href="/manifest.json">
-    <script type="module">
+    <script type="module" defer>
         import 'https://cdn.jsdelivr.net/npm/@pwabuilder/pwaupdate';
         const el = document.createElement('pwa-update');
         document.body.appendChild(el);
@@ -32,15 +32,6 @@ let title = 'Long Voyage';
     <main>
     <h1>Long Voyage</h1>
         <LongVoyageTable client:visible />
-
-        <!--
-           - You can also use imported framework components directly in your markup!
-           -
-           - Note: by default, these components are NOT interactive on the client.
-           - The `:visible` directive tells Astro to make it interactive.
-           -
-           - See https://docs.astro.build/core-concepts/component-hydration/ 
-           -->
         <p>Civil Sunrise: 6:11 AM</p>
         <p>Civil Sunset: 8:42 PM</p>
     </main>
