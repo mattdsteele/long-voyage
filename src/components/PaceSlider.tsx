@@ -23,7 +23,7 @@ export default function PaceSlider({ onPace, initialPace = 10, label }) {
         name={label}
         step="0.1"
       />
-    <span class="current-pace">{pace}</span>
+    <span class="current-pace" style={{flexBasis: '4ch', textAlign: 'right'}}>{pace}</span>
     </div>
   );
 }
