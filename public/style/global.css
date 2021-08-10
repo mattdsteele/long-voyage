@@ -21,6 +21,10 @@ body {
 
 @media (prefers-color-scheme: dark) {
   body {
-    background: #fff;
+    color: #f9fafb;
+    background: #111827;
+  }
+table tr:nth-child(odd) {
+    background-color: #483a3a;
   }
 }

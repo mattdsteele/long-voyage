@@ -29,17 +29,20 @@ export const stops: [string, Offering[], number, Temporal.ZonedDateTime?][] = [
   ["GW Checkpoint", ["W", "R"], 277.7, tomorrow.with({ hour: 17 })],
   ["Finish", ["R"], 303, tomorrow.with({ hour: 23 })],
 ];
+
 export type Paces = {
   day1: number,
   overnight: number,
   day2: number
 };
+const dayDelta = startTime.until(nightTime);
+const totalHours = dayDelta.total({unit: "hours"})
+const nightDelta = nightTime.until(morningTime);
+const totalNightHours = nightDelta.total({unit: "hours"});
+
 export const getEta = (distance: number, pace: Paces) => {
   // how far can you get by sundown?
-  const dayDelta = startTime.until(nightTime);
-  const totalHours = dayDelta.total({unit: "hours"})
   const dayDistance = totalHours * pace.day1;
-  console.log(`can make it ${dayDistance} miles at pace ${pace.day1}`)
   if (distance < dayDistance) {
     const hoursDelta = (distance / pace.day1).toPrecision(5);
     const eta = startTime.add(`PT${hoursDelta}H`);
@@ -47,10 +50,7 @@ export const getEta = (distance: number, pace: Paces) => {
   }
 
   const remainingDistance = distance - dayDistance;
-  const nightDelta = nightTime.until(morningTime);
-  const totalNightHours = nightDelta.total({unit: "hours"});
   const nightDistance = totalNightHours * pace.overnight;
-  console.log(`remaining ${remainingDistance}, night ${nightDistance}`)
   if (remainingDistance < nightDistance) {
     const hoursDelta = (remainingDistance / pace.overnight).toPrecision(5);
     const eta = nightTime.add(`PT${hoursDelta}H`);
