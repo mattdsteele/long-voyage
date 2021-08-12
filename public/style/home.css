@@ -16,7 +16,7 @@ tr:nth-child(odd) {
   }
 }
 tr.past-threshold {
-  background-color: #eea302;
+  background-color: #eea302 !important;
 }
 
 /* System Fonts as used by GitHub */
