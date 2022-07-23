@@ -42,16 +42,21 @@ export default function LongVoyage() {
         initialStopTime={stopTime}
         onStopTimeUpdate={setStopTime}
       />
-      <div>
-      <input
-        type="checkbox"
-        name="Hazards"
-        id="Hazards"
-        checked={showHazards}
-        onClick={onHazardVisibility}
-      />
-      <label for="Hazards">Hazards: {showHazards ? 'true' : 'false'}</label>
-
+      <div style={{
+        // Hack to keep in this component, whee
+        display: "flex",
+        position: "absolute",
+        top: "12px",
+        right: "24px"
+      }}>
+        <label for="Hazards" style={{paddingRight: "4px"}}>Hazards</label>
+        <input
+          type="checkbox"
+          name="Hazards"
+          id="Hazards"
+          checked={showHazards}
+          onClick={onHazardVisibility}
+        />
       </div>
     </>
   );
