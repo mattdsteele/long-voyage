@@ -15,15 +15,15 @@ const nightTime = startTime.with({ hour: 20, minute: 47});
 const morningTime = tomorrow.with({ hour: 6, minute: 11});
 
 export const stops: [string, Offering[], number, Temporal.ZonedDateTime?][] = [
+  ["Slatted Bridge", ["B"], 34.5],
   ["Syracuse", ["W", "C"], 51, startTime.with({ hour: 22 })],
-  ["Slatted Bridge", ["B"], 52.2],
   ["Van by the River", ["W"], 81.1],
   ["Pawnee City", ["W"], 109.4],
   ["Marysville", ["W", "C"], 153],
   ["Beatrice", ["W", "C", "R"], 198],
   ["Wilbur", ["W", "C"], 223.9],
   ["Crete", ["W", "C", "R"], 237.2],
-  ["Malcom", ["W", "C"], 266],
+  ["Malcom", ["W", "C"], 266, tomorrow.with({ hour: 19 })],
   ["GW Checkpoint", ["W", "R"], 277.7, tomorrow.with({ hour: 19 })],
   ["Finish", ["R"], 302.2, tomorrow.with({ hour: 23 })],
 ];
@@ -31,7 +31,8 @@ export const stops: [string, Offering[], number, Temporal.ZonedDateTime?][] = [
 export type Paces = {
   day1: number,
   overnight: number,
-  day2: number
+  day2: number,
+  stop?: number
 };
 const dayDelta = startTime.until(nightTime);
 const totalHours = dayDelta.total({unit: "hours"})

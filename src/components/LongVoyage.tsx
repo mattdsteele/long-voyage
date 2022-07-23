@@ -9,6 +9,10 @@ export default function LongVoyage() {
   const [overnightPace, setOvernightPace] = useState(11);
   const [day2Pace, setDay2Pace] = useState(10);
   const [stopTime, setStopTime] = useState(10);
+  const [showHazards, setShowHazards] = useState(false);
+  const onHazardVisibility = () => {
+    setShowHazards(!showHazards);
+  }
   return (
     <>
       <LongVoyageTable
@@ -16,6 +20,7 @@ export default function LongVoyage() {
         day2Pace={day2Pace}
         overnightPace={overnightPace}
         stopTime={stopTime}
+        showHazards={showHazards}
       />
       <PaceSlider
         label={"Day 1 pace"}
@@ -37,6 +42,17 @@ export default function LongVoyage() {
         initialStopTime={stopTime}
         onStopTimeUpdate={setStopTime}
       />
+      <div>
+      <input
+        type="checkbox"
+        name="Hazards"
+        id="Hazards"
+        checked={showHazards}
+        onClick={onHazardVisibility}
+      />
+      <label for="Hazards">Hazards: {showHazards ? 'true' : 'false'}</label>
+
+      </div>
     </>
   );
 }

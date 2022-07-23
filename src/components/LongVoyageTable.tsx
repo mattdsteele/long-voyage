@@ -1,10 +1,16 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { getEta, stops } from "./stops";
 
-export default function LongVoyageTable({ day1Pace, day2Pace, overnightPace, stopTime }) {
+export default function LongVoyageTable({ day1Pace, day2Pace, overnightPace, stopTime, showHazards }) {
   let etaStrings: string[];
   const recalculate = () => {
-    etaStrings = stops.map((stop) => {
+    etaStrings = stops.filter(stop => {
+      const [_, availability] = stop;
+      if (showHazards) {
+        return true;
+      }
+      return !availability.includes('B');
+    }).map((stop) => {
       const [location, availability, distance, threshold] = stop;
       const eta = getEta(distance, {day1: day1Pace, day2: day2Pace, overnight: overnightPace});
       let classList = "";
