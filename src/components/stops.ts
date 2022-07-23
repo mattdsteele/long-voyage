@@ -2,35 +2,30 @@ import { Temporal } from "@js-temporal/polyfill";
 
 export type Offering = "C" | "W" | "R" | "B";
 export const startTime = Temporal.ZonedDateTime.from({
-  year: 2021,
+  year: 2022,
   month: 8,
-  day: 20,
+  day: 19,
   hour: 17,
   minute: 0,
   timeZone: Temporal.TimeZone.from("America/Chicago"),
 });
 
 export const tomorrow = startTime.add({ days: 1 });
-const nightTime = startTime.with({ hour: 20, minute: 42});
+const nightTime = startTime.with({ hour: 20, minute: 47});
 const morningTime = tomorrow.with({ hour: 6, minute: 11});
 
 export const stops: [string, Offering[], number, Temporal.ZonedDateTime?][] = [
-  ["Weeping Water", ["W", "C"], 54, startTime.with({ hour: 22 })],
-  ["Slatted Bridge", ["B"], 73.6],
-  ["Syracuse", ["W", "C"], 82],
-  ["Slatted Bridge", ["B"], 88.8],
-  ["Slatted Bridge", ["B"], 101.5],
-  ["Slatted Bridge", ["B"], 109.5],
-  ["Adams", ["W"], 115.5],
-  ["Beatrice", ["W", "C", "R"], 146.6],
-  ["Slatted Bridge", ["B"], 158.5],
-  ["Wilber", ["W", "C"], 175],
-  ["Crete", ["W", "C", "R"], 188.2],
-  ["Milford", ["W", "C"], 215.1],
-  ["Seward", ["W", "C", "R"], 233.6],
-  ["Valpariso", ["W", "C"], 267.7],
-  ["GW Checkpoint", ["W", "R"], 277.7, tomorrow.with({ hour: 17 })],
-  ["Finish", ["R"], 303, tomorrow.with({ hour: 23 })],
+  ["Syracuse", ["W", "C"], 51, startTime.with({ hour: 22 })],
+  ["Slatted Bridge", ["B"], 52.2],
+  ["Van by the River", ["W"], 81.1],
+  ["Pawnee City", ["W"], 109.4],
+  ["Marysville", ["W", "C"], 153],
+  ["Beatrice", ["W", "C", "R"], 198],
+  ["Wilbur", ["W", "C"], 223.9],
+  ["Crete", ["W", "C", "R"], 237.2],
+  ["Malcom", ["W", "C"], 266],
+  ["GW Checkpoint", ["W", "R"], 277.7, tomorrow.with({ hour: 19 })],
+  ["Finish", ["R"], 302.2, tomorrow.with({ hour: 23 })],
 ];
 
 export type Paces = {

@@ -1,7 +1,7 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { getEta, stops } from "./stops";
 
-export default function LongVoyageTable({ day1Pace, day2Pace, overnightPace }) {
+export default function LongVoyageTable({ day1Pace, day2Pace, overnightPace, stopTime }) {
   let etaStrings: string[];
   const recalculate = () => {
     etaStrings = stops.map((stop) => {
