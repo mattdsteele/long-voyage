@@ -1,4 +1,5 @@
 import { Temporal, toTemporalInstant } from "@js-temporal/polyfill";
+import StopSlider from "./StopSlider";
 
 export type Offering = "C" | "W" | "R" | "B";
 export const startTime = Temporal.ZonedDateTime.from({
@@ -13,6 +14,14 @@ export const startTime = Temporal.ZonedDateTime.from({
 export const paceTomorrow = startTime.add({ days: 1 });
 
 export type Stop = [string, Offering[], number, Temporal.ZonedDateTime?];
+type StopWithEta = {
+  name: string,
+  offerings: Offering[],
+  distance: number,
+  cutoff?: Temporal.ZonedDateTime,
+  eta: Temporal.ZonedDateTime
+}
+
 export const stops: Stop[] = [
   ["Slatted Bridge", ["B"], 34.5],
   ["Slatted Bridge", ["B"], 39.0],
@@ -45,19 +54,18 @@ export type Paces = {
   stop?: number
 };
 
-
 const nightStart = startTime.with({ hour: 20, minute: 47 });
 const morningStart = paceTomorrow.with({ hour: 6, minute: 11 });
 
 export const getEta = (
-  stop: Stop,
+  sentStops = stops,
   pace: Paces,
   beginning = startTime,
-  sentStops = stops,
   nightTime = nightStart,
   morningTime = morningStart
+): StopWithEta[] => {
+  let stopsWithEtas: StopWithEta[] = [];
 
-): Temporal.ZonedDateTime => {
   // Basic calculations
   const tomorrow = startTime.add({ days: 1 }).with({hour: 0, minute: 0});
   const farFuture = tomorrow.add({years: 10})
@@ -73,7 +81,7 @@ export const getEta = (
   let nextThreshold = thresholds[paceIndex];
 
   for (const stopToCheck of sentStops) {
-    const [, offerings, distance] = stopToCheck;
+    const [name, offerings, distance, cutoff] = stopToCheck;
     
     let valueFound = false;
     while (!valueFound) {
@@ -102,9 +110,10 @@ export const getEta = (
         nextThreshold = thresholds[paceIndex];
       } else {
         let stopEta = workingEta.add(`PT${hoursDelta}H`).round("minute");
-        if (stopToCheck === stop) {
-          return stopEta;
-        }
+        // if (stopToCheck === stop) {
+        //   return stopEta;
+        // }
+        stopsWithEtas.push({ name, distance, offerings, cutoff, eta: stopEta });
         // Add stop time if not a bridge
         if (!offerings.includes("B")) {
           stopEta = stopEta.add({ minutes: pace.stop }).round("minute");
@@ -117,6 +126,5 @@ export const getEta = (
       }
     }
   }
-
-  throw new Error("Failed");
+  return stopsWithEtas;
 };

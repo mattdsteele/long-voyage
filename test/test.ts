@@ -2,7 +2,6 @@ import { Temporal } from "@js-temporal/polyfill";
 import test from "ava";
 import { getEta, Paces, Stop } from "../src/components/stops";
 
-const compare = Temporal.ZonedDateTime.compare;
 const startTime = Temporal.ZonedDateTime.from({
   year: 2022,
   month: 8,
@@ -12,7 +11,7 @@ const startTime = Temporal.ZonedDateTime.from({
   timeZone: Temporal.TimeZone.from("America/Chicago"),
 });
 const tomorrow = startTime.add({ days: 1 }).with({ hour: 0, minute: 0 });
-test("simple stops", (t) => {
+test.only("simple stops", (t) => {
   const stops: Stop[] = [
     ["First", [], 10],
     ["Second", [], 20],
@@ -31,12 +30,9 @@ test("simple stops", (t) => {
     minute: 0,
     timeZone: Temporal.TimeZone.from("America/Chicago"),
   });
-  const first = getEta(stops[0], paces, startTime, stops);
-  const second = getEta(stops[1], paces, startTime, stops);
-  t.is(startTime.with({ hour: 19 }).toString(), first.toString());
-  t.is(startTime.with({ hour: 20, minute: 10 }).toString(), second.toString());
-
-  // t.is(0, compare(eta.round({ smallestUnit: "minutes" }), comparison));
+  const etas = getEta(stops, paces, startTime);
+  t.is(startTime.with({ hour: 19 }).toString(), etas[0].eta.toString());
+  t.is(startTime.with({ hour: 20, minute: 10 }).toString(), etas[1].eta.toString());
 });
 
 test("into overnight", (t) => {
@@ -53,33 +49,16 @@ test("into overnight", (t) => {
     day2: 10,
     stop: 30,
   };
-  const first = getEta(
-    stops[0],
+  const etas = getEta(
+    stops,
     paces,
     startTime,
-    stops,
     nightStart,
     morningStart
   );
-  const second = getEta(
-    stops[1],
-    paces,
-    startTime,
-    stops,
-    nightStart,
-    morningStart
-  );
-  const third = getEta(
-    stops[2],
-    paces,
-    startTime,
-    stops,
-    nightStart,
-    morningStart
-  );
-  t.is(startTime.with({ hour: 19 }).toString(), first.toString());
-  t.is(startTime.with({ hour: 23, minute: 0 }).toString(), second.toString());
-  t.is(tomorrow.with({ hour: 1, minute: 30 }).toString(), third.toString());
+  t.is(startTime.with({ hour: 19 }).toString(), etas[0].eta.toString());
+  t.is(startTime.with({ hour: 23, minute: 0 }).toString(), etas[1].eta.toString());
+  t.is(tomorrow.with({ hour: 1, minute: 30 }).toString(), etas[2].eta.toString());
 });
 test("stop during transition", (t) => {
   const stops: Stop[] = [
@@ -94,24 +73,15 @@ test("stop during transition", (t) => {
     day2: 10,
     stop: 30,
   };
-  const first = getEta(
-    stops[0],
+  const etas = getEta(
+    stops,
     paces,
     startTime,
-    stops,
     nightStart,
     morningStart
   );
-  const second = getEta(
-    stops[1],
-    paces,
-    startTime,
-    stops,
-    nightStart,
-    morningStart
-  );
-  t.is(startTime.with({ hour: 20 }).toString(), first.toString());
-  t.is(startTime.with({ hour: 22, minute: 30 }).toString(), second.toString());
+  t.is(startTime.with({ hour: 20 }).toString(), stop[0].eta.toString());
+  t.is(startTime.with({ hour: 22, minute: 30 }).toString(), stop[1].eta.toString());
 });
 test("morning transition", (t) => {
   const stops: Stop[] = [
@@ -128,35 +98,10 @@ test("morning transition", (t) => {
     day2: 10,
     stop: 60,
   };
-  const first = getEta(
-    stops[0],
+  const etas = getEta(
+    stops,
     paces,
     startTime,
-    stops,
-    nightStart,
-    morningStart
-  );
-  const second = getEta(
-    stops[1],
-    paces,
-    startTime,
-    stops,
-    nightStart,
-    morningStart
-  );
-  const third = getEta(
-    stops[2],
-    paces,
-    startTime,
-    stops,
-    nightStart,
-    morningStart
-  );
-  const fourth = getEta(
-    stops[3],
-    paces,
-    startTime,
-    stops,
     nightStart,
     morningStart
   );
@@ -166,10 +111,10 @@ test("morning transition", (t) => {
   // hit third at 0500
   // leave third at 0600
   // hit fourth at 0700
-  t.is(startTime.with({ hour: 20 }).toString(), first.toString());
-  t.is(startTime.with({ hour: 23 }).toString(), second.toString());
-  t.is(tomorrow.with({ hour: 5 }).toString(), third.toString());
-  t.is(tomorrow.with({ hour: 7 }).toString(), fourth.toString());
+  t.is(startTime.with({ hour: 20 }).toString(), stop[0].eta.toString());
+  t.is(startTime.with({ hour: 23 }).toString(), stop[1].eta.toString());
+  t.is(tomorrow.with({ hour: 5 }).toString(), stop[2].eta.toString());
+  t.is(tomorrow.with({ hour: 7 }).toString(), stop[3].eta.toString());
 });
 test("Does not count bridges", (t) => {
   const stops: Stop[] = [
@@ -188,27 +133,10 @@ test("Does not count bridges", (t) => {
     day2: 10,
     stop: 60,
   };
-  const first = getEta(
-    stops[0],
+  const etas = getEta(
+    stops,
     paces,
     startTime,
-    stops,
-    nightStart,
-    morningStart
-  );
-  const second = getEta(
-    stops[2],
-    paces,
-    startTime,
-    stops,
-    nightStart,
-    morningStart
-  );
-  const third = getEta(
-    stops[4],
-    paces,
-    startTime,
-    stops,
     nightStart,
     morningStart
   );
@@ -218,8 +146,8 @@ test("Does not count bridges", (t) => {
   // hit third at 0500
   // leave third at 0600
   // hit fourth at 0700
-  t.is(startTime.with({ hour: 20 }).toString(), first.toString());
-  t.is(startTime.with({ hour: 23 }).toString(), second.toString());
-  t.is(tomorrow.with({ hour: 5 }).toString(), third.toString());
+  t.is(startTime.with({ hour: 20 }).toString(), etas[0].eta.toString());
+  t.is(startTime.with({ hour: 23 }).toString(), etas[2].eta.toString());
+  t.is(tomorrow.with({ hour: 5 }).toString(), etas[4].eta.toString());
 });
 
