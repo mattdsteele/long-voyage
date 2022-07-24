@@ -1,5 +1,4 @@
-import { Temporal, toTemporalInstant } from "@js-temporal/polyfill";
-import StopSlider from "./StopSlider";
+import { Temporal } from "@js-temporal/polyfill";
 
 export type Offering = "C" | "W" | "R" | "B";
 export const startTime = Temporal.ZonedDateTime.from({
@@ -80,8 +79,8 @@ export const getEta = (
   let workingPace = paces[paceIndex];
   let nextThreshold = thresholds[paceIndex];
 
-  for (const stopToCheck of sentStops) {
-    const [name, offerings, distance, cutoff] = stopToCheck;
+  for (const stop of sentStops) {
+    const [name, offerings, distance, cutoff] = stop;
     
     let valueFound = false;
     while (!valueFound) {
