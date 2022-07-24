@@ -1,4 +1,4 @@
-import { Temporal } from "@js-temporal/polyfill";
+import { Temporal, toTemporalInstant } from "@js-temporal/polyfill";
 
 export type Offering = "C" | "W" | "R" | "B";
 export const startTime = Temporal.ZonedDateTime.from({
@@ -10,11 +10,10 @@ export const startTime = Temporal.ZonedDateTime.from({
   timeZone: Temporal.TimeZone.from("America/Chicago"),
 });
 
-export const tomorrow = startTime.add({ days: 1 });
-const nightTime = startTime.with({ hour: 20, minute: 47});
-const morningTime = tomorrow.with({ hour: 6, minute: 11});
+export const paceTomorrow = startTime.add({ days: 1 });
 
-export const stops: [string, Offering[], number, Temporal.ZonedDateTime?][] = [
+export type Stop = [string, Offering[], number, Temporal.ZonedDateTime?];
+export const stops: Stop[] = [
   ["Slatted Bridge", ["B"], 34.5],
   ["Slatted Bridge", ["B"], 39.0],
   ["Slatted Bridge", ["B"], 40.0],
@@ -34,9 +33,9 @@ export const stops: [string, Offering[], number, Temporal.ZonedDateTime?][] = [
   ["Slatted Bridge", ["B"], 219.9],
   ["Wilbur", ["W", "C"], 223.9],
   ["Crete", ["W", "C", "R"], 237.2],
-  ["Malcom", ["W", "C"], 266, tomorrow.with({ hour: 19 })],
-  ["GW Checkpoint", ["W", "R"], 277.7, tomorrow.with({ hour: 19 })],
-  ["Finish", ["R"], 302.2, tomorrow.with({ hour: 23 })],
+  ["Malcom", ["W", "C"], 266, paceTomorrow.with({ hour: 19 })],
+  ["GW Checkpoint", ["W", "R"], 277.7, paceTomorrow.with({ hour: 19 })],
+  ["Finish", ["R"], 302.2, paceTomorrow.with({ hour: 23 })],
 ];
 
 export type Paces = {
@@ -45,30 +44,79 @@ export type Paces = {
   day2: number,
   stop?: number
 };
-const dayDelta = startTime.until(nightTime);
-const totalHours = dayDelta.total({unit: "hours"})
-const nightDelta = nightTime.until(morningTime);
-const totalNightHours = nightDelta.total({unit: "hours"});
 
-export const getEta = (distance: number, pace: Paces) => {
-  // how far can you get by sundown?
-  const dayDistance = totalHours * pace.day1;
-  if (distance < dayDistance) {
-    const hoursDelta = (distance / pace.day1).toPrecision(5);
-    const eta = startTime.add(`PT${hoursDelta}H`);
-    return eta;
+
+const nightStart = startTime.with({ hour: 20, minute: 47 });
+const morningStart = paceTomorrow.with({ hour: 6, minute: 11 });
+
+export const getEta = (
+  stop: Stop,
+  pace: Paces,
+  beginning = startTime,
+  sentStops = stops,
+  nightTime = nightStart,
+  morningTime = morningStart
+
+): Temporal.ZonedDateTime => {
+  // Basic calculations
+  const tomorrow = startTime.add({ days: 1 }).with({hour: 0, minute: 0});
+  const farFuture = tomorrow.add({years: 10})
+
+  // State values
+  let paceIndex = 0;
+  let paces = [pace.day1, pace.overnight, pace.day2];
+  let thresholds = [nightTime, morningTime, farFuture];
+
+  let workingEta = beginning;
+  let workingDistance = 0;
+  let workingPace = paces[paceIndex];
+  let nextThreshold = thresholds[paceIndex];
+
+  for (const stopToCheck of sentStops) {
+    const [, offerings, distance] = stopToCheck;
+    
+    let valueFound = false;
+    while (!valueFound) {
+      // how far at the current pace to the next threshold?
+      const distanceToNext = distance - workingDistance;
+      let durationToNextThreshold = workingEta.until(nextThreshold);
+      const hoursDelta = (distanceToNext / workingPace).toPrecision(5);
+      const durationAtCurrentPace = Temporal.Duration.from(`PT${hoursDelta}H`);
+      const willMakeNextThreshold = Temporal.Duration.compare(
+        durationAtCurrentPace,
+        durationToNextThreshold
+      );
+
+      if (willMakeNextThreshold !== -1) {
+        // Ride to the threshold, and set new values
+        const hoursUntilNextThreshold =
+          durationToNextThreshold.hours + durationToNextThreshold.minutes / 60;
+        const distanceUntilNextThreshold =
+          workingPace * hoursUntilNextThreshold;
+
+        workingEta = nextThreshold;
+        workingDistance += distanceUntilNextThreshold;
+
+        paceIndex++;
+        workingPace = paces[paceIndex];
+        nextThreshold = thresholds[paceIndex];
+      } else {
+        let stopEta = workingEta.add(`PT${hoursDelta}H`).round("minute");
+        if (stopToCheck === stop) {
+          return stopEta;
+        }
+        // Add stop time if not a bridge
+        if (!offerings.includes("B")) {
+          stopEta = stopEta.add({ minutes: pace.stop }).round("minute");
+        }
+
+        // Update stop values
+        workingEta = stopEta;
+        workingDistance = distance;
+        valueFound = true;
+      }
+    }
   }
 
-  const remainingDistance = distance - dayDistance;
-  const nightDistance = totalNightHours * pace.overnight;
-  if (remainingDistance < nightDistance) {
-    const hoursDelta = (remainingDistance / pace.overnight).toPrecision(5);
-    const eta = nightTime.add(`PT${hoursDelta}H`);
-    return eta;
-  }
-
-  const finalDistance = remainingDistance - nightDistance;
-  const hoursDelta = (finalDistance / pace.day2).toPrecision(5);
-  const eta = morningTime.add(`PT${hoursDelta}H`);
-  return eta;
+  throw new Error("Failed");
 };
