@@ -1,15 +1,21 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { getEta, stops } from "./stops";
 
-export default function LongVoyageTable({ day1Pace, day2Pace, overnightPace }) {
+export default function LongVoyageTable({ day1Pace, day2Pace, overnightPace, stopTime, showHazards }) {
   let etaStrings: string[];
   const recalculate = () => {
-    etaStrings = stops.map((stop) => {
-      const [location, availability, distance, threshold] = stop;
-      const eta = getEta(distance, {day1: day1Pace, day2: day2Pace, overnight: overnightPace});
+    const etasWithStops = getEta(stops, {day1: day1Pace, day2: day2Pace, overnight: overnightPace, stop: stopTime});
+    etaStrings = etasWithStops.filter(stop => {
+      const {offerings} = stop;
+      if (showHazards) {
+        return true;
+      }
+      return !offerings.includes('B');
+    }).map((stop) => {
+      const {name, offerings, distance, cutoff, eta} = stop;
       let classList = "";
-      if (threshold) {
-        const before = Temporal.ZonedDateTime.compare(threshold, eta);
+      if (cutoff) {
+        const before = Temporal.ZonedDateTime.compare(cutoff, eta);
         classList = before === -1 ? "past-threshold" : "";
       }
       const f = new Intl.DateTimeFormat("en-us", {
@@ -26,8 +32,8 @@ export default function LongVoyageTable({ day1Pace, day2Pace, overnightPace }) {
       return (
         <tr class={classList}>
           <td>{distance}</td>
-          <td>{location}</td>
-          <td>{availability.map((a) => mappings[a]).join(" ")}</td>
+          <td>{name}</td>
+          <td>{offerings.map((a) => mappings[a]).join(" ")}</td>
           <td>{etahhmm}</td>
         </tr>
       );
