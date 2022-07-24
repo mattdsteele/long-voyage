@@ -1,6 +1,6 @@
 import { Temporal } from "@js-temporal/polyfill";
 import test from "ava";
-import { foo, getEta, Paces, Stop } from "../src/components/stops";
+import { getEta, Paces, Stop } from "../src/components/stops";
 
 const startTime = Temporal.ZonedDateTime.from({
   year: 2022,

@@ -5,9 +5,9 @@ import PaceSlider from "./PaceSlider";
 import StopSlider from './StopSlider';
 
 export default function LongVoyage() {
-  const [day1Pace, setDay1Pace] = useState(12);
-  const [overnightPace, setOvernightPace] = useState(11);
-  const [day2Pace, setDay2Pace] = useState(10);
+  const [day1Pace, setDay1Pace] = useState(13);
+  const [overnightPace, setOvernightPace] = useState(10.5);
+  const [day2Pace, setDay2Pace] = useState(12);
   const [stopTime, setStopTime] = useState(10);
   const [showHazards, setShowHazards] = useState(false);
   const onHazardVisibility = () => {
