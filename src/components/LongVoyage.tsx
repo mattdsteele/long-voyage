@@ -40,7 +40,7 @@ export default function LongVoyage() {
       <StopSlider
         label={"Minutes/Stop"}
         initialStopTime={stopTime}
-        onStopTimeUpdate={setStopTime}
+        onStop={setStopTime}
       />
       <div style={{
         // Hack to keep in this component, whee

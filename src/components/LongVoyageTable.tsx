@@ -12,7 +12,7 @@ export default function LongVoyageTable({ day1Pace, day2Pace, overnightPace, sto
       return !availability.includes('B');
     }).map((stop) => {
       const [location, availability, distance, threshold] = stop;
-      const eta = getEta(distance, {day1: day1Pace, day2: day2Pace, overnight: overnightPace});
+      const eta = getEta(stop, {day1: day1Pace, day2: day2Pace, overnight: overnightPace, stop: stopTime});
       let classList = "";
       if (threshold) {
         const before = Temporal.ZonedDateTime.compare(threshold, eta);
