@@ -16,12 +16,12 @@ export default function PaceSlider({ onPace, initialPace = 10, label }) {
     style={{flexGrow: 1}}
         type="range"
         min="9"
-        max="15"
+        max="20"
         value={pace}
         onInput={onPaceUpdate}
         id={label}
         name={label}
-        step="0.1"
+        step="0.2"
       />
     <span class="current-pace" style={{flexBasis: '4ch', textAlign: 'right'}}>{pace}</span>
     </div>
