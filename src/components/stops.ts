@@ -26,7 +26,7 @@ export const stops: Stop[] = [
   ["Weeping Water", ["W", "C"], 46.7, startTime.with({ hour: 22 })],
   ["Pacific Junction", ["W", "C"], 79.9],
   ["Glenwood", ["W", "C"], 84.2],
-  ["Treynor (Van by the River)", ["W"], 109, paceTomorrow.with({ hour: 4 })],
+  ["Treynor (Van)", ["W"], 109, paceTomorrow.with({ hour: 4 })],
   ["Missouri Valley", ["W", "C", "R"], 151.6],
   ["Blair", ["W", "C"], 166.5],
   ["Arlington", ["W", "C"], 188.2],
