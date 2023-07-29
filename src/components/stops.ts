@@ -1,5 +1,6 @@
 import { Temporal } from "@js-temporal/polyfill";
 
+// C-store, Water, Restaurant, Bridge
 export type Offering = "C" | "W" | "R" | "B";
 export const startTime = Temporal.ZonedDateTime.from({
   year: 2022,
@@ -22,28 +23,17 @@ type StopWithEta = {
 }
 
 export const stops: Stop[] = [
-  ["Slatted Bridge", ["B"], 34.5],
-  ["Slatted Bridge", ["B"], 39.0],
-  ["Slatted Bridge", ["B"], 40.0],
-  ["Slatted Bridge", ["B"], 47.3],
-  ["Syracuse", ["W", "C"], 51, startTime.with({ hour: 22 })],
-  ["Slatted Bridge", ["B"], 64],
-  ["Van by the River", ["W"], 81.1],
-  ["Slatted Bridge", ["B"], 97.7],
-  ["Slatted Bridge", ["B"], 101.7],
-  ["Pawnee City", ["W"], 109.4],
-  ["Slatted Bridge", ["B"], 129.3],
-  ["Marysville", ["W", "C"], 153],
-  ["Beatrice", ["W", "C", "R"], 198],
-  ["Slatted Bridge", ["B"], 208.8],
-  ["Slatted Bridge", ["B"], 211.9],
-  ["Slatted Bridge", ["B"], 215.7],
-  ["Slatted Bridge", ["B"], 219.9],
-  ["Wilbur", ["W", "C"], 223.9],
-  ["Crete", ["W", "C", "R"], 237.2],
-  ["Malcom", ["W", "C"], 266, paceTomorrow.with({ hour: 19 })],
-  ["GW Checkpoint", ["W", "R"], 277.7, paceTomorrow.with({ hour: 19 })],
-  ["Finish", ["R"], 302.2, paceTomorrow.with({ hour: 23 })],
+  ["Weeping Water", ["W", "C"], 46.7, startTime.with({ hour: 22 })],
+  ["Pacific Junction", ["W", "C"], 79.9],
+  ["Glenwood", ["W", "C"], 84.2],
+  ["Treynor (Van)", ["W"], 109, paceTomorrow.with({ hour: 4 })],
+  ["Missouri Valley", ["W", "C", "R"], 151.6],
+  ["Blair", ["W", "C"], 166.5],
+  ["Arlington", ["W", "C"], 188.2],
+  ["Valley", ["W", "C"], 202.4],
+  ["Valpariso", ["W", "C"], 245.7, paceTomorrow.with({ hour: 21 })],
+  ["GW Checkpoint", ["W"], 261, paceTomorrow.with({ hour: 19 })],
+  ["Finish", ["R"], 303.4, paceTomorrow.with({ hour: 23 })],
 ];
 
 export type Paces = {
@@ -66,8 +56,8 @@ export const getEta = (
   let stopsWithEtas: StopWithEta[] = [];
 
   // Basic calculations
-  const tomorrow = startTime.add({ days: 1 }).with({hour: 0, minute: 0});
-  const farFuture = tomorrow.add({years: 10})
+  const tomorrow = startTime.add({ days: 1 }).with({ hour: 0, minute: 0 });
+  const farFuture = tomorrow.add({ years: 10 })
 
   // State values
   let paceIndex = 0;
@@ -81,7 +71,7 @@ export const getEta = (
 
   for (const stop of sentStops) {
     const [name, offerings, distance, cutoff] = stop;
-    
+
     let valueFound = false;
     while (!valueFound) {
       // how far at the current pace to the next threshold?

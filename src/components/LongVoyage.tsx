@@ -43,8 +43,9 @@ export default function LongVoyage() {
         onStop={setStopTime}
       />
       <div style={{
-        // Hack to keep in this component, whee
-        display: "flex",
+        // display: "flex",
+        // No hazards this year
+        display: "none",
         position: "absolute",
         top: "12px",
         right: "24px"
