@@ -10,7 +10,7 @@ export default function PaceSlider({ onPace, initialPace = 10, label }) {
   }
 
   return (
-    <div style={{display: 'flex', marginBottom: '6px'}}>
+    <div style={{display: 'flex', minHeight: '28px', alignItems: 'center'}}>
     <label for={label} style={{width: '150px'}}>{label}:</label>
     <input
     style={{flexGrow: 1}}
