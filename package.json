@@ -10,9 +10,14 @@
   },
   "devDependencies": {
     "@astrojs/preact": "^2",
+    "@turf/turf": "^6.5.0",
+    "@types/circle-to-polygon": "^2.2.0",
+    "@types/geojson": "^7946.0.10",
     "astro": "^2",
     "ava": "^5",
+    "circle-to-polygon": "^2.2.0",
     "preact": "^10.10.0",
+    "slugify": "^1.6.6",
     "ts-node": "^10.2.0",
     "typescript": "^5"
   },
