@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "blue.steele.longvoyage.twa",
+        "sha256_cert_fingerprints": ["59:B3:46:2D:E8:97:2A:A3:A9:B1:E5:97:93:CF:4A:19:8A:2B:00:86:EC:9B:64:2D:0B:9A:20:64:C1:97:E4:31"]
+      }
+    }]
