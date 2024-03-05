@@ -7,8 +7,8 @@
   "name": "Long Voyage",
   "short_name": "Long Voyage",
   "description": "Race Pace",
-  "background_color": "transparent",
-  "theme_color": "transparent",
+  "background_color": "#b5ca69",
+  "theme_color": "#b5ca69",
   "orientation": "portrait",
   "prefer_related_applications": false,
   "icons": [
