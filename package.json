@@ -9,12 +9,12 @@
     "build": "astro build"
   },
   "devDependencies": {
-    "@astrojs/preact": "^2",
+    "@astrojs/preact": "^4.0.5",
     "@turf/turf": "^6.5.0",
     "@types/circle-to-polygon": "^2.2.0",
     "@types/geojson": "^7946.0.10",
-    "astro": "^2",
-    "ava": "^5",
+    "astro": "^5.5.2",
+    "ava": "^6",
     "circle-to-polygon": "^2.2.0",
     "preact": "^10.10.0",
     "slugify": "^1.6.6",
@@ -22,7 +22,7 @@
     "typescript": "^5"
   },
   "dependencies": {
-    "@astrojs/partytown": "^1.2.3",
+    "@astrojs/partytown": "^2.1.4",
     "@js-temporal/polyfill": "^0.4.2"
   },
   "ava": {
