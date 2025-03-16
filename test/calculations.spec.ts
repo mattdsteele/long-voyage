@@ -1,5 +1,5 @@
 import { Temporal } from "@js-temporal/polyfill";
-import test from "ava";
+import { expect, test } from "vitest";
 import { getEta, Paces, Stop } from "../src/components/stops";
 
 const startTime = Temporal.ZonedDateTime.from({
@@ -12,8 +12,8 @@ const startTime = Temporal.ZonedDateTime.from({
 });
 const tomorrow = startTime.add({ days: 1 }).with({ hour: 0, minute: 0 });
 test("something", t => {
-  t.is(1, 1)
-})
+  expect(1).toEqual(1);
+});
 test("simple stops", (t) => {
   const stops: Stop[] = [
     ["First", ["C"], 10],
@@ -36,8 +36,12 @@ test("simple stops", (t) => {
   const nightStart = startTime.with({ hour: 20, minute: 0 });
   const morningStart = tomorrow.with({ hour: 6, minute: 0 });
   const etas = getEta(stops, paces, startTime, nightStart, morningStart);
-  t.is(startTime.with({ hour: 19 }).toString(), etas[0].eta.toString());
-  t.is(startTime.with({ hour: 20, minute: 10 }).toString(), etas[1].eta.toString());
+  expect(startTime.with({ hour: 19 }).toString()).toEqual(
+    etas[0].eta.toString()
+  );
+  expect(startTime.with({ hour: 20, minute: 10 }).toString()).toEqual(
+    etas[1].eta.toString()
+  );
 });
 
 test("into overnight", (t) => {
@@ -61,9 +65,9 @@ test("into overnight", (t) => {
     nightStart,
     morningStart
   );
-  t.is(startTime.with({ hour: 19 }).toString(), etas[0].eta.toString());
-  t.is(startTime.with({ hour: 23, minute: 0 }).toString(), etas[1].eta.toString());
-  t.is(tomorrow.with({ hour: 1, minute: 30 }).toString(), etas[2].eta.toString());
+  expect(startTime.with({ hour: 19 }).toString()).toEqual(etas[0].eta.toString());
+  expect(startTime.with({ hour: 23, minute: 0 }).toString()).toEqual(etas[1].eta.toString());
+  expect(tomorrow.with({ hour: 1, minute: 30 }).toString()).toEqual(etas[2].eta.toString());
 });
 test("stop during transition", (t) => {
   const stops: Stop[] = [
@@ -85,8 +89,8 @@ test("stop during transition", (t) => {
     nightStart,
     morningStart
   );
-  t.is(startTime.with({ hour: 20 }).toString(), etas[0].eta.toString());
-  t.is(startTime.with({ hour: 22, minute: 30 }).toString(), etas[1].eta.toString());
+  expect(startTime.with({ hour: 20 }).toString()).toEqual(etas[0].eta.toString());
+  expect(startTime.with({ hour: 22, minute: 30 }).toString()).toEqual(etas[1].eta.toString());
 });
 test("morning transition", (t) => {
   const stops: Stop[] = [
@@ -116,10 +120,10 @@ test("morning transition", (t) => {
   // hit third at 0500
   // leave third at 0600
   // hit fourth at 0700
-  t.is(startTime.with({ hour: 20 }).toString(), etas[0].eta.toString());
-  t.is(startTime.with({ hour: 23 }).toString(), etas[1].eta.toString());
-  t.is(tomorrow.with({ hour: 5 }).toString(), etas[2].eta.toString());
-  t.is(tomorrow.with({ hour: 7 }).toString(), etas[3].eta.toString());
+  expect(startTime.with({ hour: 20 }).toString()).toEqual(etas[0].eta.toString());
+  expect(startTime.with({ hour: 23 }).toString()).toEqual(etas[1].eta.toString());
+  expect(tomorrow.with({ hour: 5 }).toString()).toEqual(etas[2].eta.toString());
+  expect(tomorrow.with({ hour: 7 }).toString()).toEqual(etas[3].eta.toString());
 });
 test("Does not count bridges", (t) => {
   const stops: Stop[] = [
@@ -151,7 +155,7 @@ test("Does not count bridges", (t) => {
   // hit third at 0500
   // leave third at 0600
   // hit fourth at 0700
-  t.is(startTime.with({ hour: 20 }).toString(), etas[0].eta.toString());
-  t.is(startTime.with({ hour: 23 }).toString(), etas[2].eta.toString());
-  t.is(tomorrow.with({ hour: 5 }).toString(), etas[4].eta.toString());
+  expect(startTime.with({ hour: 20 }).toString()).toEqual(etas[0].eta.toString());
+  expect(startTime.with({ hour: 23 }).toString()).toEqual(etas[2].eta.toString());
+  expect(tomorrow.with({ hour: 5 }).toString()).toEqual(etas[4].eta.toString());
 });

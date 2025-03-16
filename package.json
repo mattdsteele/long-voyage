@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "start": "astro dev --host",
-    "test": "ava",
-    "tw": "ava --watch",
+    "test": "vitest run",
+    "tw": "vitest watch",
     "build": "astro build"
   },
   "devDependencies": {
@@ -14,23 +14,15 @@
     "@types/circle-to-polygon": "^2.2.0",
     "@types/geojson": "^7946.0.10",
     "astro": "^5.5.2",
-    "ava": "^6",
     "circle-to-polygon": "^2.2.0",
     "preact": "^10.10.0",
     "slugify": "^1.6.6",
     "ts-node": "^10.2.0",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^3.0.8"
   },
   "dependencies": {
     "@astrojs/partytown": "^2.1.4",
     "@js-temporal/polyfill": "^0.4.2"
-  },
-  "ava": {
-    "extensions": [
-      "ts"
-    ],
-    "require": [
-      "ts-node/register"
-    ]
   }
 }
