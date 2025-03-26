@@ -8,7 +8,7 @@ export const startTime = Temporal.ZonedDateTime.from({
   day: 19,
   hour: 17,
   minute: 0,
-  timeZone: Temporal.TimeZone.from("America/Chicago"),
+  timeZone: "America/Chicago",
 });
 
 export const paceTomorrow = startTime.add({ days: 1 });

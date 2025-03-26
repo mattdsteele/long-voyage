@@ -8,7 +8,7 @@ const startTime = Temporal.ZonedDateTime.from({
   day: 1,
   hour: 18,
   minute: 0,
-  timeZone: Temporal.TimeZone.from("America/Chicago"),
+  timeZone: "America/Chicago",
 });
 const tomorrow = startTime.add({ days: 1 }).with({ hour: 0, minute: 0 });
 test("something", t => {
@@ -31,7 +31,7 @@ test("simple stops", (t) => {
     day: 1,
     hour: 18,
     minute: 0,
-    timeZone: Temporal.TimeZone.from("America/Chicago"),
+    timeZone: "America/Chicago",
   });
   const nightStart = startTime.with({ hour: 20, minute: 0 });
   const morningStart = tomorrow.with({ hour: 6, minute: 0 });
